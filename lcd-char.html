@@ -1,0 +1,287 @@
+<html>
+<head>
+	<title>LCD Custom Character Generator</title>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+	<style>
+		container {
+			padding-left: 4em;
+			padding-right: 4em;
+		}
+		table.lcd { 
+			width: 200px; 
+			height: 320px; 
+			background-color: #87CCFF;
+		}
+		table.lcd.mini { 
+			width: 40px; 
+			height: 66px; 
+			background-color: #87CCFF;
+		}
+		table.lcd td { 
+			background-color: #65BBEE; 
+			box-shadow: 0px 0px 1px 0px #87CCFF; 
+			width: 20%;
+			height: 12.5%;
+		}
+		table.lcd.mini td { 
+			box-shadow: none;
+			border: none;
+		}	
+		table.lcd td.on { background-color: #224465;}
+
+	</style>
+	<script>
+
+		//Set array default values
+		var designBits = [
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0]
+		];
+		
+		function updateCode(){
+            var charcode = "\r\nbyte myDesign[8] = {";
+
+			for (i=0;i<=7;i++) {
+				charcode+="\r\n\    0b";
+
+				for (j=0;j<=4;j++){
+					charcode+=designBits[i][j];
+				}
+				if (i!=7) {
+					charcode+=",";
+				} else {
+					charcode+="\r\n};";
+				}
+				
+			}
+			$('span.charcode').html(charcode);		
+		}
+		
+		$(function() {
+		
+			$('table.lcd td.pixel').click(function() {
+				//Get the address of toggled cell
+				var column_num = parseInt( $(this).index() ) + 1;
+				var row_num = parseInt( $(this).parent().index() );
+
+				//Update the editor and preview            
+				$(this).toggleClass( "on" );
+				$('table.lcd.mini tr:eq('+row_num+') td:nth-child('+column_num+')').toggleClass( "on" );
+			
+				//Update the array            
+				if ( $(this).hasClass( "on" ) ) {
+					designBits[row_num][column_num-1]=1;
+				} else {
+					designBits[row_num][column_num-1]=0;
+				}
+			
+				//Update the sample code
+				updateCode();
+			});
+			
+			$('#clear').click(function(){
+				designBits = [
+					[0,0,0,0,0],
+					[0,0,0,0,0],
+					[0,0,0,0,0],
+					[0,0,0,0,0],
+					[0,0,0,0,0],
+					[0,0,0,0,0],
+					[0,0,0,0,0],
+					[0,0,0,0,0]
+				];
+				$('td').removeClass("on");
+				updateCode();
+			});		  
+			
+			//Initial Code
+			updateCode();
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+	<div class="pure-g">
+		<div class="pure-u-1">
+			<h1>Custom LCD Character Generator</h1>
+			
+			<p>Click the pixel to turn it on or off. The code will automatically update on the right side.</p>
+			
+			<p>Designed fand tested with the YW Robot LCM1602 IIC V1 module along with the <a href="https://bitbucket.org/fmalpartida/new-liquidcrystal/downloads/">New LiquidCrystal v1.3.5</a> Library.</p>
+		</div>
+	
+		<div class="pure-u-1-5">
+			<table class="lcd">
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"</td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+				<tr>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+					<td class="pixel"></td>
+				</tr>
+			</table>
+			<hr>
+			<div class="container pure-g">
+				<div class="pure-u-1-4"></div>
+				<div class="pure-u-1-4">
+					<table class="lcd mini">
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"</td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+						<tr>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+							<td class="pixel"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="pure-u-1-2">
+					<button class="pure-button" id="clear">Reset</button>
+				</div>	
+			</div>
+		</div>	
+		<div class="pure-u-4-5">
+			<pre>
+#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7,3,POSITIVE);
+
+	<span class="charcode">
+byte myDesign[8] = {
+	0b00000,
+	0b00000,
+	0b00000,
+	0b00000,
+	0b00000,
+	0b00000,
+	0b00000,
+	0b00000
+};
+	</span>
+
+
+void setup() {
+  lcd.begin(16,2); 
+  lcd.createChar(0, myDesign);
+
+  lcd.clear(); 
+  lcd.write((byte)0);
+}
+
+void loop() {
+
+}
+		</pre>
+		</div>
+	</div>
+	</div>
+
+</body>
+</html>
